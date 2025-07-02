@@ -1,0 +1,25 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import time
+
+def apply_to_indeed_jobs(keyword, location):
+    driver = webdriver.Chrome()
+    driver.get(f"https://www.indeed.com/jobs?q={keyword}&l={location}")
+    time.sleep(3)
+    
+    jobs = driver.find_elements(By.CSS_SELECTOR, ".jobTitle")  # Selector de Indeed
+    
+    for job in jobs[:5]:  # Limitar a 5 aplicaciones para evitar bloqueos
+        job.click()
+        time.sleep(2)
+        try:
+            apply_button = driver.find_element(By.CSS_SELECTOR, ".indeed-apply-button")
+            apply_button.click()
+            time.sleep(1)
+            print("✅ Aplicación enviada en Indeed")
+        except:
+            print("❌ Oferta no permitía aplicación rápida")
+    
+    driver.quit()
+
+apply_to_indeed_jobs("Python Developer", "Remote")
